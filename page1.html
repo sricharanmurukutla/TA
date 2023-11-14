@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <style>
+        .container {
+            display: flex;
+        }
+        .left-side {
+            width: 50%;
+            height: 100vh;
+            border-right: 1px solid #ccc;
+            padding: 10px;
+        }
+        .right-side {
+            width: 50%;
+            height: 100vh;
+            padding: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="container">
+        <div class="left-side">
+            <h1>Shopping Cart</h1>
+            <button ng-click="selectFruit('Apple', 20)">Apple</button>
+            <button ng-click="selectFruit('Banana', 56)">Banana</button>
+            <button ng-click="selectFruit('Mango', 80)">Mango</button>
+            <iframe src="http://localhost:3000/" name="indexframe"></iframe>
+        </div>
+        <div class="right-side">
+            <h1>Fruits Added</h1>
+            <iframe src="http://localhost:3000/display" name="page2"></iframe>
+            <p>Total Cost: ${{ totalCost }}</p>
+        </div>
+    </div>
+    <script>
+        var app = angular.module("myApp", []);
+        app.controller("myCtrl", function ($scope, $http) {
+            $scope.totalCost = 0;
+
+            $scope.selectFruit = function (name, price) {
+                $http.post("/selectedFruit", { name: name, price: price })
+                    .then(function (response) {
+                        $scope.totalCost += price;
+                        window.frames["page2"].location.reload();
+                    })
+                    .catch(function (error) {
+                        console.log("Error: ", error);
+                    });
+            };
+        });
+    </script>
+</body>
+</html>

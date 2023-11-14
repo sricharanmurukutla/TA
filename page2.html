@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Selected cart</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+    <h1>Selected Fruit Information</h1>
+    <p>Name: {{selectedFruit.name}}</p>
+    <p>Price: ${{selectedFruit.price}}</p>
+    <script>
+        var app = angular.module("myApp", []);
+        app.controller("myCtrl", function ($scope, $http) {
+            $http.get("/getSelectedFruit")
+                .then(function (response) {
+                    $scope.selectedFruit = response.data;
+                })
+                .catch(function (error) {
+                    console.log("error:", error);
+                });
+        });
+    </script>
+</body>
+</html>
